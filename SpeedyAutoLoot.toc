@@ -2,7 +2,7 @@
 ## Title: |cffEEE4AESpeedy AutoLoot|r
 ## Notes: |cff58C6FALoot at ludicrous speed!|r|n|n|cff8D8D8DSlash command: /sal, /speedyautoloot|r
 ## Author: Yuyuli
-## Version: 2.0.29
+## Version: 2.0.30
 ## SavedVariables: SpeedyAutoLootDB
 
 SpeedyAutoLoot.lua

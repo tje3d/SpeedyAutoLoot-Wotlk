@@ -45,6 +45,7 @@ Use any of the following commands: `/sal`, `/speedyautoloot`, `/speedyloot`
 | `/sal sound` | Toggle inventory full alert sound |
 | `/sal set <SoundID>` | Set a custom sound ID for the inventory full alert (Default: `139` for Classic, `44321` for Retail) |
 | `/sal help` | Show help message |
+| Hold `Shift` while looting | Bypass Auto Loot and show the Loot Window normally |
 
 ## Compatibility
 
