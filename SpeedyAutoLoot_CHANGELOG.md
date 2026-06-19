@@ -1,4 +1,7 @@
 
+### 2.0.30
+- Hold Shift while looting to bypass auto-loot and open the Loot Window normally.
+
 ### 2.0.29
 - Added Slash commands to Description when hovering Addon in Addon list.
 

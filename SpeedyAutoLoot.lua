@@ -34,6 +34,12 @@ local band = bit.band
 local select = select
 local tContains = tContains
 
+local function SafePlaySound(sound, channel)
+	if sound then
+		PlaySound(sound)
+	end
+end
+
 function AutoLoot:ProcessLoot(item, q)
 	local total, free, bagFamily = 0
 	local itemFamily = GetItemFamily(item)
@@ -119,7 +125,7 @@ function AutoLoot:LootItems(numItems)
 	end
 
 	if IsFishingLoot() and not SpeedyAutoLootDB.global.fishingSoundDisabled and SOUNDKIT then
-		PlaySound(SOUNDKIT.FISHING_REEL_IN, self.audioChannel)
+		SafePlaySound(SOUNDKIT.FISHING_REEL_IN, self.audioChannel)
 	end
 end
 
@@ -142,7 +148,9 @@ function AutoLoot:OnEvent(e, ...)
 		end
 
 		self.isLooting = true
-		if aL or (aL == nil and GetCVarBool("autoLootDefault") ~= IsModifiedClick("AUTOLOOTTOGGLE")) then
+		if IsShiftKeyDown() then
+			self:ShowLootFrame(true)
+		elseif aL or (aL == nil and GetCVarBool("autoLootDefault") ~= IsModifiedClick("AUTOLOOTTOGGLE")) then
 			self:LootItems(numItems)
 		else
 			self:ShowLootFrame(true)
@@ -152,21 +160,13 @@ function AutoLoot:OnEvent(e, ...)
 		self.isHidden = false
 		self.isItemLocked = false
 		self:ShowLootFrame(false)
-	elseif (e == "UI_ERROR_MESSAGE" and tContains(({ERR_INV_FULL,ERR_ITEM_MAX_COUNT}), select(2,...))) or e == "LOOT_BIND_CONFIRM" then
+	elseif (e == "UI_ERROR_MESSAGE" and tContains(({ERR_INV_FULL,ERR_ITEM_MAX_COUNT}), select(3,...))) or e == "LOOT_BIND_CONFIRM" then
 		if self.isLooting and self.isHidden then
 			self:ShowLootFrame(true)
 			if e == "UI_ERROR_MESSAGE" then
 				self:PlayInventoryFullSound()
 			end
 		end
-	end
-end
-
-local function SafePlaySound(sound, channel)
-	if SOUNDKIT then
-		PlaySound(sound, channel)
-	elseif type(sound) == "string" then
-		PlaySound(sound)
 	end
 end
 
@@ -198,6 +198,7 @@ function AutoLoot:Help(msg)
 	if not cmd or cmd == "" or cmd == "help" then
 		print(fName.."   |cff58C6FA/sal    /speedyautoloot    /speedyloot|r")
 		print("  |cff58C6FA/sal auto              -|r  |cffEEE4AEEnable Auto Looting for all characters|r")
+		print("  |cff58C6FAHold Shift            -|r  |cffEEE4AEBypass Auto Loot and show Loot Window normally|r")
 		print("  |cff58C6FA/sal fish              -|r  |cffEEE4AEDisable Fishing reel in sound|r")
 		print("  |cff58C6FA/sal sound            -|r  |cffEEE4AEPlay a Sound when Inventory is full while looting|r")
 		if self.isClassic then
